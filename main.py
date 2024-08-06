@@ -25,7 +25,8 @@ with open("otchet.txt", "a") as file:
     file.write('\nИТПЗ')
 
 name_shift_list = ['A', 'Б', 'В', 'Г']
-name_shift = input('Введите букву вашей смены (А, Б, В, Г)').upper() 
+name_shift = input('Введите букву вашей смены (А, Б, В, Г)').upper()
+
 while True:
     if name_shift in name_shift_list:
         with open("otchet.txt", "a") as file:
@@ -49,7 +50,9 @@ def pipe():
         name_customer = input('Введите полное наиминование заказчика:')
         size_pipes = input('Введите сортамент труб:')
 
-        info_pipes = f'{number_order} поз. {pos_order}, {name_customer}, {size_pipes}:'
+        info_pipes = (
+            f'{number_order} поз. {pos_order}, {name_customer}, {size_pipes}:'
+            )
         with open("otchet.txt", "a") as file:
             file.write(f'Заказ {info_pipes} \n')
 
@@ -89,18 +92,23 @@ def sample_selection():
         if more_samples == 'да':
             while more_samples == 'да':
                 num_sample = input(
-                'Введите номер отбираемой пробы:'
+                    'Введите номер отбираемой пробы:'
                 )
                 with open("otchet.txt", "a") as file:
                     file.write(f', {num_sample}')
-                    more_samples = input('Были ли ещё партии? (Введите да/нет)').lower()
+                    more_samples = input(
+                        'Были ли ещё партии? (Введите да/нет)'
+                        ).lower()
         elif more_samples == 'нет':
             with open("otchet.txt", "a") as file:
                 file.write('. \n')
             break
         else:
             print('Вы ошиблись при вводе. Попробуйте ещё раз')
-            more_samples = input('Были ли ещё партии? (Введите да/нет)').lower()
+            more_samples = input(
+                'Были ли ещё партии? (Введите да/нет)'
+                ).lower()
+
 
 was_pipe = input('Был ли у вас прокат труб на смене? (Введите да/нет)').lower()
 
@@ -110,7 +118,9 @@ while True:
             file.write(f'Прокат: {was_pipe}\n\n')
             break
     elif was_pipe == 'да':
-            pipe()
-            was_pipe = input('Были ли ещё заказы на прокате?')
+        pipe()
+        was_pipe = input('Были ли ещё заказы на прокате?')
     else:
-        was_pipe = input('Вы ошиблись при вводе. Попробуйте ещё раз. (Введите да/нет)').lower()
+        was_pipe = input(
+            'Вы ошиблись при вводе. Попробуйте ещё раз. (Введите да/нет)'
+            ).lower()
