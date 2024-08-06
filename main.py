@@ -16,21 +16,18 @@ def night_shift_value(night_shift):
                 ).lower()
 
 
-date_shift = input('У вас ночная смена? (Введите да/нет)').lower()
-
-with open("otchet.txt", "w") as file:
-    file.write(night_shift_value(date_shift))
-
-with open("otchet.txt", "a") as file:
-    file.write('\nИТПЗ')
+date_shift = night_shift_value(
+    input('У вас ночная смена? (Введите да/нет)').lower()
+    )
+name_file = f'Смена за {date_shift}.txt'
 
 name_shift_list = ['A', 'Б', 'В', 'Г']
 name_shift = input('Введите букву вашей смены (А, Б, В, Г)').upper()
 
 while True:
     if name_shift in name_shift_list:
-        with open("otchet.txt", "a") as file:
-            file.write(f'\nСмена {name_shift}\n\n')
+        with open(name_file, "w") as file:
+            file.write(f'{date_shift}\nИТПЗ\nСмена {name_shift}\n\n')
             break
     else:
         name_shift = input(
@@ -41,7 +38,7 @@ while True:
 def pipe():
     """ПРОКАТ"""
     while True:
-        with open("otchet.txt", "a") as file:
+        with open(name_file, "a") as file:
             file.write('Прокат:\n')
 
         """ИНФОРМАЦИЯ О ЗАКАЗЕ"""
@@ -53,7 +50,7 @@ def pipe():
         info_pipes = (
             f'{number_order} поз. {pos_order}, {name_customer}, {size_pipes}:'
             )
-        with open("otchet.txt", "a") as file:
+        with open(name_file, "a") as file:
             file.write(f'Заказ {info_pipes} \n')
 
         """ПРИЁМКА ТРУБ БЕЗ РЕЗЬБЫ"""
@@ -61,7 +58,7 @@ def pipe():
         accepted_pipes = input('Введите количество принятых труб:')
         if total_pipes == accepted_pipes:
             acceptance = (f'{total_pipes}/{accepted_pipes}/0/0')
-            with open("otchet.txt", "a") as file:
+            with open(name_file, "a") as file:
                 file.write(f'Приёмка труб без резьбы: {acceptance} \n')
             sample_selection()
             break
@@ -69,15 +66,20 @@ def pipe():
         else:
             reject_pipes = input('Введите количество отклонённых труб:')
             reject_pipes_info = input('Введите все деффекты:')
-            marriage_pipes = input('Введите количество бракованых труб:')
-            marriage_pipes_info = input('Введите все деффекты брака:')
-            acceptance = (f'{total_pipes}/{accepted_pipes}/'
-                          f'{reject_pipes} {reject_pipes_info}/'
-                          f'{marriage_pipes}({marriage_pipes_info})')
-            with open("otchet.txt", "a") as file:
-                file.write(f'Приёмка труб без резьбы: {acceptance} \n')
-            sample_selection()
-            break
+            if accepted_pipes + reject_pipes != total_pipes:
+                marriage_pipes = input('Введите количество бракованных труб:')
+                marriage_pipes_info = input('Введите все деффекты брака:')
+                acceptance = (f'{total_pipes}/{accepted_pipes}/'
+                              f'{reject_pipes}({reject_pipes_info})/'
+                              f'{marriage_pipes}({marriage_pipes_info})')
+                with open(name_file, "a") as file:
+                    file.write(f'Приёмка труб без резьбы: {acceptance} \n')
+                sample_selection()
+                break
+            else:
+                acceptance = (f'{total_pipes}/{accepted_pipes}/'
+                              f'{reject_pipes} ({reject_pipes_info})/0'
+                              )
 
 
 def sample_selection():
@@ -85,7 +87,7 @@ def sample_selection():
     num_sample = input(
         'Введите номер отбираемой пробы:'
         )
-    with open("otchet.txt", "a") as file:
+    with open(name_file, "a") as file:
         file.write(f'Отбор проб: {num_sample}')
     more_samples = input('Были ли ещё партии? (Введите да/нет)').lower()
     while True:
@@ -94,13 +96,13 @@ def sample_selection():
                 num_sample = input(
                     'Введите номер отбираемой пробы:'
                 )
-                with open("otchet.txt", "a") as file:
+                with open(name_file, "a") as file:
                     file.write(f', {num_sample}')
                     more_samples = input(
                         'Были ли ещё партии? (Введите да/нет)'
                         ).lower()
         elif more_samples == 'нет':
-            with open("otchet.txt", "a") as file:
+            with open(name_file, "a") as file:
                 file.write('. \n')
             break
         else:
@@ -114,7 +116,7 @@ was_pipe = input('Был ли у вас прокат труб на смене? (
 
 while True:
     if was_pipe == 'нет':
-        with open("otchet.txt", "a") as file:
+        with open(name_file, "a") as file:
             file.write(f'Прокат: {was_pipe}\n\n')
             break
     elif was_pipe == 'да':
