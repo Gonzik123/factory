@@ -34,13 +34,11 @@ while True:
             'Вы ввели несуществующую смену. Повторите ввод. (А, Б, В, Г)'
             ).upper()
 
-
+with open(name_file, "a") as file:
+    file.write('Прокат:')
 def pipe():
     """ПРОКАТ"""
     while True:
-        with open(name_file, "a") as file:
-            file.write('Прокат:\n')
-
         """ИНФОРМАЦИЯ О ЗАКАЗЕ"""
         number_order = input('Введите номер заказа:')
         pos_order = input('Введите позицию заказа:')
@@ -51,7 +49,7 @@ def pipe():
             f'{number_order} поз. {pos_order}, {name_customer}, {size_pipes}:'
             )
         with open(name_file, "a") as file:
-            file.write(f'Заказ {info_pipes} \n')
+            file.write(f'\nЗаказ {info_pipes} \n')
 
         """ПРИЁМКА ТРУБ БЕЗ РЕЗЬБЫ"""
         total_pipes = input('Введите количество прокатанных труб:')
@@ -112,19 +110,22 @@ def sample_selection():
                 ).lower()
 
 
-was_pipe = input('Был ли у вас прокат труб на смене? (Введите да/нет)').lower()
-
-while True:
-    if was_pipe == 'нет':
-        with open(name_file, "a") as file:
-            file.write(f'Прокат: {was_pipe}\n\n')
+def check_pipe(was_pipe):
+    flag_pipe = False
+    while True:
+        if was_pipe == 'нет' and flag_pipe == False:
+            with open(name_file, "a") as file:
+                file.write(f' {was_pipe}.\n\n')
             break
-    elif was_pipe == 'да':
-        pipe()
-        was_pipe = input('Были ли ещё заказы на прокате?')
-    else:
-        was_pipe = input(
-            'Вы ошиблись при вводе. Попробуйте ещё раз. (Введите да/нет)'
-            ).lower()
-print()
+        elif was_pipe == 'нет' and flag_pipe == True:
+            break
+        elif was_pipe == 'да':
+            flag_pipe = True
+            pipe()
+            was_pipe = input('Были ли ещё заказы на прокате?')
+        else:
+            was_pipe = input(
+                'Вы ошиблись при вводе. Попробуйте ещё раз. (Введите да/нет)'
+                ).lower()
 
+was_pipe = check_pipe(input('Был ли у вас прокат труб на смене? (Введите да/нет)').lower())
